@@ -1,10 +1,11 @@
 import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownNotification from "./DropdownNotification";
+import DropdownLanguage from "./DropdownLanguage";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 import SearchForm from "@/components/Header/SearchForm";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -71,7 +72,7 @@ const Header = (props: {
         <div className="hidden xl:block">
           <div>
             <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
-            {t('HomePage.title')}
+              {t("HomePage.title")}
             </h1>
             <p className="font-medium">Next.js Admin Dashboard Solution</p>
           </div>
@@ -90,6 +91,10 @@ const Header = (props: {
             {/* <!-- Notification Menu Area --> */}
             <DropdownNotification />
             {/* <!-- Notification Menu Area --> */}
+
+            {/* Dropdown Language  */}
+            <DropdownLanguage />
+            {/* Dropdown Language  */}
           </ul>
 
           {/* <!-- User Area --> */}
