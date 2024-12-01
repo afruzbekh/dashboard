@@ -1,9 +1,13 @@
-"use client";
+"use client"; // Ensure this is a client component
 import jsVectorMap from "jsvectormap";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "../../js/us-aea-en";
 
 const MapOne: React.FC = () => {
+  // Create a ref to store the map instance
+  const vectorMapRef = useRef<typeof jsVectorMap | null>(null);
+  const mapElementRef = useRef<HTMLDivElement | null>(null); // Ref for map container
+
   useEffect(() => {
     const mapElement = document.getElementById("mapOne");
 
@@ -12,11 +16,11 @@ const MapOne: React.FC = () => {
       return;
     }
 
-    const vectorMapOne = new jsVectorMap({
+    // Initialize the map and store it in the ref
+    vectorMapRef.current = new jsVectorMap({
       selector: "#mapOne",
       map: "us_aea_en",
       zoomButtons: true,
-
       regionStyle: {
         initial: {
           fill: "#C8D0D8",
@@ -36,7 +40,6 @@ const MapOne: React.FC = () => {
           cursor: "pointer",
         },
       },
-
       labels: {
         regions: {
           render(code: string) {
@@ -46,9 +49,17 @@ const MapOne: React.FC = () => {
       },
     });
 
+    // Cleanup function to destroy the map instance
     return () => {
-      if (vectorMapOne) {
-        vectorMapOne.destroy();
+      if (vectorMapRef.current) {
+        // Delay the destruction of the map to allow DOM updates
+        requestAnimationFrame(() => {
+          if (mapElement && mapElement.parentNode) {
+            vectorMapRef.current.destroy();
+          } else {
+            console.error("Map element not found during cleanup");
+          }
+        });
       } else {
         console.error("Vector map instance not found during cleanup");
       }
@@ -61,7 +72,7 @@ const MapOne: React.FC = () => {
         Region labels
       </h4>
       <div className="h-[422px]">
-        <div id="mapOne" className="mapOne map-btn"></div>
+        <div id="mapOne" className="mapOne map-btn" ref={mapElementRef}></div>
       </div>
     </div>
   );
